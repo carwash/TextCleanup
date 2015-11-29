@@ -16,7 +16,7 @@ my $processed = $hr->process($string);
 #Set up new txt file
 my $newfile = "AliceInWonderland.txt";
 
-#Use the open() function to create the file.
+#Use the open() function to create the file
 unless(open FILE, '>'.$newfile) {
      Die with error message 
     # if we can't open it.
