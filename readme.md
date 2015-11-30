@@ -9,4 +9,6 @@ perl HTMLToCleanTxt.pl
 
 in Terminal to create raw text files to work with.
 
+Full instructions for working with this script in Perl: http://ow.ly/Vf09Etwi
+
 Author: Lisa Tagliaferri (http://lisatagliaferri.com).
