@@ -4,12 +4,11 @@ use strict;
 use warnings;
 use 5.014; # Some modern features such as say() and the /r flag on s/// are used.
 use autodie 2.12 qw(:file);
-
+use threads;
+use MCE::Loop chunk_size => 'auto', max_workers => 'auto';
 use Fcntl 'O_RDONLY';
 use Tie::File;
-# Available from https://api.metacpan.org/source/TODDR/Tie-File-1.00/lib/Tie/File.pm
 use HTML::Restrict;
-# Available from https://api.metacpan.org/source/OALDERS/HTML-Restrict-2.2.2/lib/HTML/Restrict.pm
 
 use open IO => ':raw';
 
@@ -32,30 +31,36 @@ else {
 # Create a new HTML::Restrict object to process the data
 my $hr = HTML::Restrict->new();
 
-# Process each file in turn
-for my $file (@files) {
-	# Open and stringify a specific HTML file
-	open(my $fh, '<', $file);
-	my $string = do {
-		local $/;
-		<$fh>;
-	};
-	close $fh;
+# Initialise MCE
+MCE::Loop::init {};
 
-	# Process the stringified file to remove HTML tags
-	my $processed = $hr->process($string);
+# Process files in parallel, distributed over multiple cores
+mce_loop {
+	for my $file (@{$_}) {
+		# Open and stringify a specific HTML file
+		open(my $fh, '<', $file);
+		my $string = do {
+			local $/;
+			<$fh>;
+		};
+		close $fh;
 
-	# Name the output file according to the input file
-	my $outfile = $file =~ s/(.*)\..{3,4}$/$1.txt/r;
+		# Process the stringified file to remove HTML tags
+		my $processed = $hr->process($string);
 
-	# Use the open() function to create the new txt file
-	open(my $output, '>', $outfile);
+		# Name the output file according to the input file
+		my $outfile = $file =~ s/(.*)\..{3,4}$/$1.txt/r;
 
-	# Write the cleaned raw text from the HTML file to the new file
-	print $output $processed;
+		# Use the open() function to create the new txt file
+		open(my $output, '>', $outfile);
 
-	# Close the new file
-	close $output;
-}
+		# Write the cleaned raw text from the HTML file to the new file
+		print $output $processed;
+
+		# Close the new file
+		close $output;
+	}
+} @files;
+MCE::Loop::finish;
 
 say join('', 'Finished processing ', scalar @files, ' file', (@files == 1 ? '' : 's'), '.');
