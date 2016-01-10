@@ -23,4 +23,4 @@ If only a single argument is given, and it's a text file, it's assumed to contai
 
 Full instructions for working with this script in Perl: http://ow.ly/Vf09E
 
-Author: Lisa Tagliaferri (http://lisatagliaferri.com).
+Contributors: Lisa Tagliaferri (http://lisatagliaferri.com), Marcus Smith (https://github.com/carwash)
