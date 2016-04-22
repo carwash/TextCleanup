@@ -20,4 +20,4 @@ If only a single argument is given, and it's a text file, it's assumed to contai
 
 Full instructions for working with this script in Perl: http://ow.ly/Vf09E
 
-Contributors: ltagliaferri, Marcus Smith (https://github.com/carwash)
+Contributors: ltagliaferri, [Marcus Smith](https://github.com/carwash)

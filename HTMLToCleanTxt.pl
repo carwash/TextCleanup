@@ -24,9 +24,10 @@ if (@ARGV) {
 		@files = @ARGV;
 	}
 }
-# If no files specified, default to 'AliceInWonderland.html'
+# If no files specified, exit with help text
 else {
-	@files = (qw[AliceInWonderland.html]);
+	say "No files specified.\n\nUsage:\n\nHTMLToCleanTxt.pl MyFile01.html MyFile02.html\n- processes 'MyFile01.html' and 'MyFile02.html'\n\nHTMLToCleanTxt.pl *.html\n- processes all HTML files in the working directory.\n\nHTMLToCleanTxt.pl FilesToProcess.txt\n- processes files listed in 'FilesToProcess.txt'.";
+	exit;
 }
 
 # Create a new HTML::Restrict object to process the data
